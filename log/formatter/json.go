@@ -19,7 +19,7 @@ func (f *JsonFormatter) Format(msg *message.LogMessage) (string, error) {
 	sprintingMessage := fmt.Sprintf(msg.Message, msg.Arguments...)
 
 	jsonStruct := jsonLogMessage{
-		Timestamp: time.Now().Format(time.RFC3339),
+		Timestamp: msg.Time.Format(time.RFC3339),
 		Level:     msg.Level,
 		Message:   sprintingMessage,
 	}

@@ -5,6 +5,7 @@ import (
 	formatter "github.com/asstroneer/go-log/log/formatter"
 	message2 "github.com/asstroneer/go-log/log/message"
 	"github.com/asstroneer/go-log/log/writer"
+	"time"
 )
 
 const LogLevelFatal = "fatal"
@@ -55,6 +56,7 @@ func log(level, msg string, args []any) {
 		Level:     level,
 		LevelCode: logLevelToCode(level),
 		Arguments: args,
+		Time:      time.Now(),
 	}
 
 	if logMessage.LevelCode >= logLevel {
