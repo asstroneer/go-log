@@ -8,7 +8,7 @@ import (
 
 func main() {
 	log.SetWriter(&writer.ConsoleWriter{})
-	log.SetFormatter(&formatter.ConsoleFormatter{})
+	log.SetFormatter(&formatter.JsonFormatter{})
 	log.SetLogLevel(log.LogLevelInfo)
 
 	log.Fatal("This is an fatal message")
