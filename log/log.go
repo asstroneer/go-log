@@ -2,8 +2,8 @@ package log
 
 import (
 	"fmt"
-	formatter "github.com/asstroneer/go-log/log/formatter"
-	message2 "github.com/asstroneer/go-log/log/message"
+	"github.com/asstroneer/go-log/log/formatter"
+	"github.com/asstroneer/go-log/log/message"
 	"github.com/asstroneer/go-log/log/writer"
 	"time"
 )
@@ -51,7 +51,7 @@ func Fatal(msg string, args ...any) {
 }
 
 func log(level, msg string, args []any) {
-	logMessage := message2.LogMessage{
+	logMessage := message.LogMessage{
 		Message:   msg,
 		Level:     level,
 		LevelCode: logLevelToCode(level),
@@ -59,16 +59,16 @@ func log(level, msg string, args []any) {
 		Time:      time.Now(),
 	}
 
-	if logMessage.LevelCode >= logLevel {
+	if !compareLogLevel(logMessage.LevelCode) {
 		return
 	}
 
-	message, err := messageFormatter.Format(&logMessage)
+	formattedMessage, err := messageFormatter.Format(&logMessage)
 	if err != nil {
 		fmt.Printf("Error in log: %s\n", err.Error())
 		return
 	}
-	err = messageWriter.Write(logMessage.Level, message)
+	err = messageWriter.Write(logMessage.Level, formattedMessage)
 	if err != nil {
 		fmt.Printf("Error in log: %s\n", err.Error())
 		return
@@ -84,10 +84,14 @@ func logLevelToCode(level string) int {
 	case LogLevelWarning:
 		return 2
 	case LogLevelInfo:
-		return 4
+		return 3
 	case LogLevelDebug:
-		return 5
+		return 4
 	}
 
 	return 100
+}
+
+func compareLogLevel(messageLevel int) bool {
+	return !(messageLevel > logLevel) || messageLevel == logLevel
 }
